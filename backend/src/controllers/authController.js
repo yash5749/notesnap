@@ -18,11 +18,14 @@ export const register = asyncHandler(async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, salt);
 
     // Create new user
-    const user = await User.create({
+    const user = new User({
+        name,
         email,
-        password: hashedPassword,
-        name
+        password
     });
+
+    await user.save();
+
 
     // Generate token
     const token = generateToken(user._id);
@@ -53,7 +56,7 @@ export const login = asyncHandler(async (req, res) => {
     // Check password
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
-        throw new ApiError(401, "Invalid email or password");
+        throw new ApiError(401, "Incorrect Password");
     }
 
     // Generate token
