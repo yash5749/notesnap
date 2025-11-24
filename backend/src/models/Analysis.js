@@ -134,6 +134,6 @@ const analysisSchema = new mongoose.Schema(
 // Indexes for efficient querying
 analysisSchema.index({ userId: 1, createdAt: -1 });
 analysisSchema.index({ subjectId: 1, status: 1 });
-analysisSchema.index({ expiresAt: 1 }, { expireAfterSeconds: 0 });
+
 
 export default mongoose.model("Analysis", analysisSchema);

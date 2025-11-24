@@ -55,7 +55,7 @@ export const validateSubject = [
 
 // FIXED: Analysis validation - now using param() instead of body()
 export const validateAnalysis = [
-  param('subjectId')  // ✅ Changed from body() to param()
+  body('subjectId')  // ✅ Changed from body() to param()
     .isMongoId()
     .withMessage('Valid subject ID is required'),
   handleValidationErrors

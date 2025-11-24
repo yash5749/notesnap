@@ -32,8 +32,8 @@ const userSchema = new mongoose.Schema({
 });
 
 // Indexes
-userSchema.index({ email: 1 });
-userSchema.index({ createdAt: 1 });
+
+
 
 // OPTION 1: Traditional callback style (works in all Mongoose versions)
 userSchema.pre("save", async function () {
