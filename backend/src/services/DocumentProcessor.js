@@ -1,6 +1,8 @@
-import {PDFParse }from 'pdf-parse';
+import * as pdfjs from "pdfjs-dist/legacy/build/pdf.mjs";
 import fs from 'fs/promises';
 import logger from '../utils/logger.js';
+
+
 
 class DocumentProcessor {
   constructor() {
@@ -47,22 +49,40 @@ class DocumentProcessor {
     }
   }
 
-  async processPDF(filePath) {
-    try {
-      const dataBuffer = await fs.readFile(filePath);
-      const data = await PDFParse(dataBuffer);
-      
-      return {
-        content: data.text,
-        metadata: {
-          pages: data.numpages,
-          wordCount: data.text.split(/\s+/).length
-        }
-      };
-    } catch (error) {
-      throw new Error(`PDF processing failed: ${error.message}`);
+
+async processPDF(filePath) {
+  try {
+    const buffer = await fs.readFile(filePath);
+
+    // ✅ FIX: Convert Buffer → Uint8Array
+    const uint8Array = new Uint8Array(buffer);
+
+    const loadingTask = pdfjs.getDocument({ data: uint8Array });
+    const pdf = await loadingTask.promise;
+
+    let text = "";
+
+    for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
+      const page = await pdf.getPage(pageNum);
+      const content = await page.getTextContent();
+      const pageText = content.items.map(i => i.str).join(" ");
+      text += pageText + "\n";
     }
+
+    return {
+      content: text,
+      metadata: {
+        pages: pdf.numPages,
+        wordCount: text.split(/\s+/).length,
+      },
+    };
+  } catch (error) {
+    logger.error("PDF processing error:", error);
+    throw new Error(`PDF processing failed: ${error.message}`);
   }
+}
+
+
 
   cleanContent(content) {
     return content

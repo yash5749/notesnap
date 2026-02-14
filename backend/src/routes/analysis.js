@@ -30,7 +30,7 @@ router.get('/debug/redis-health', getRedisHealth);
 router.post('/debug/redis-clear', clearRedisCache);
 
 // Analysis routes
-router.post('/subject/:subjectId', validateAnalysis, analyzeSubject);
+router.post('/subject/', validateAnalysis, analyzeSubject);
 router.get('/', getAnalyses);
 router.post('/generate-questions', generateQuestions);
 

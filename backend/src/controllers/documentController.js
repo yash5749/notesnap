@@ -161,10 +161,10 @@ const processDocumentContent = async (documentId) => {
 
 // ✅ REDIS: Enhanced getDocuments with caching
 export const getDocuments = asyncHandler(async (req, res) => {
-    const { subjectId, documentType } = req.query;
+    const { subjectId } = req.query;
     
     // ✅ REDIS: Generate cache key
-    const cacheKey = `documents:${req.user._id}:${subjectId || 'all'}:${documentType || 'all'}`;
+    const cacheKey = `documents:${req.user._id}:${subjectId || 'all'}`;
     
     // ✅ REDIS: Check cache first
     try {
@@ -190,9 +190,7 @@ export const getDocuments = asyncHandler(async (req, res) => {
         filter.subjectId = subjectId;
     }
 
-    if (documentType) {
-        filter.documentType = documentType;
-    }
+
 
     const documents = await Document.find(filter)
         .populate('subjectId', 'name')
