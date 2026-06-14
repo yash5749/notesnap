@@ -204,29 +204,29 @@ classDiagram
 ```mermaid
 classDiagram
   class BaseProvider {
-    <<abstract>>
+    <<Abstract>>
     +String name
-    +generate(prompt) Promise~String~*
+    +generate(prompt) String
   }
 
   class GeminiProvider {
     +String name
-    +generate(prompt) Promise~String~
+    +generate(prompt) String
   }
 
   class OllamaProvider {
     +String name
-    +generate(prompt) Promise~String~
+    +generate(prompt) String
   }
 
   class OpenRouterProvider {
     +String name
-    +generate(prompt) Promise~String~
+    +generate(prompt) String
   }
 
   class AIManager {
     -BaseProvider[] providers
-    +generate(prompt) Promise~{output, provider}~
+    +generate(prompt) Result
   }
 
   BaseProvider <|-- GeminiProvider
@@ -700,10 +700,5 @@ Each provider requires its own API credentials:
 - **Ollama** — Local installation with model served on `OLLAMA_BASE_URL`
 
 ---
-
-## Testing
-
-```bash
-cd backend
-npm test              # Jest test suite
-```
+# Licence
+ MIT
